@@ -1,0 +1,133 @@
+---
+title: "Homepage"
+author: "Sam Rosenblatt"
+date: "8/29/2018"
+
+---
+
+<!--- output: 
+  rmdformats::html_clean:
+    highlight: kate --->
+### Computational Biology
+### Fall 2018    
+
+<p align="center">
+#### TA: Lauren Ash 
+Office: Marsh Life Science 211   
+Office Hours: Monday 2-3pm; Tuesday 11:30am-12:30pm    
+Email: lvash@uvm.edu   
+</p>
+
+
+<!--- This is how you comment stuff out so pandoc will ignore it  --->
+
+<!-- This is how you comment stuff that doesnt need pandoc to ignore -->
+
+<!--- <p style="text-align:left;"><img src="Lauren.jpg"  width="200" height="200"></p>  --->
+
+<p style="text-align:left;"><img src="Sam.jpg"  width="200" height="200"></p>
+
+<i> I learned how to do italicized text from Pokemon GO </i>
+
+
+## Helpful Links   
+* [Course Webpage](https://gotellilab.github.io/Bio381/)   
+* [RMarkdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)   
+* [Using prettydoc](http://yixuan.cos.name/prettydoc/)
+* [Github website templates](https://github.com/jekyll/jekyll/wiki/Themes)   
+* [R help](http://stackoverflow.com/questions/tagged/r)   
+* [Git in RStudio Troubleshooting](Git_Troubleshooting.html)
+
+## Table of contents of Homework Assignments    
+* [08/29/2018 Homework 1: Setting up a webpage](#id-section1)
+* [09/05/2018 Homework 2: Typora diagrams](#id-section2)
+* [Homework 3: ](#id-section3)
+* [Homework 4: ](#id-section4)
+* [Homework 5: ](#id-section5)
+* [Homework 6: ](#id-section6) 
+* [Homework 7: ](#id-section7)
+* [Homework 8: ](#id-section8)
+* [Homework 9: ](#id-section9)   
+* [Week 10: ](#id-section10)
+* [Week 11: ](#id-section11)
+
+
+## Homework Solutions and Notes
+
+------
+<div id='id-section1'/>
+### Week 1: Setting up a webpage   
+#### August 29, 2018   
+[Assignment Page](https://gotellilab.github.io/Bio381/Homeworks/Homework01_2018.html)   
+[Detailed Instructions from Lecture](https://gotellilab.github.io/Bio381/Lectures/Lecture01.html)   
+   
+**Due:**   
+1. Your github homepage   
+2. Your BIO 381 webpage    
+   
+**No solution**   
+
+------
+<div id='id-section2'/>
+### Week 2: Typora diagrams   
+#### September 5, 2018   
+[Assignment Page](https://gotellilab.github.io/Bio381/Homeworks/Homework02_2018.html)   
+
+**Due:**   
+1) **2 of the 4 diagrams** discussed in class: a) cause-and-effect diagram; b) pre-graph; c) DIPSwitch table c) logic tree    
+2) Link to the homework on your webpage   
+[Example using html](Dissertation_PathDiagram2.html)     
+[Homework 2 Link](testimage.html)
+
+------
+<div id='id-section3'/>
+### Week 3: 
+
+Due:   
+       
+
+
+
+------
+<div id='id-section4'/>
+### Week 4:    
+
+Due:   
+      
+
+------
+<div id='id-section5'/>   
+### Week 5: 
+Due:   
+   
+ 
+------
+<div id='id-section6'/>   
+### Week 6: 
+
+------
+<div id='id-section7'/>
+### Week 7: 
+
+
+------
+<div id='id-section8'/>
+### Week 8:  
+
+Due:   
+   
+
+------
+<div id='id-section9'/>
+### Week 9: 
+
+Due:   
+
+------
+<div id='id-section10'/>
+### Week 10:    
+
+
+------
+<div id='id-section11'/>
+### Week 11:   
