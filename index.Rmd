@@ -2,9 +2,12 @@
 title: "Homepage"
 author: "Sam Rosenblatt"
 date: "8/29/2018"
-
+output: 
+  html_document: 
+    theme: lumen
 ---
-
+<body style="background-color:#e6ffff;">
+</body>
 <!--- output: 
   rmdformats::html_clean:
     highlight: kate --->
