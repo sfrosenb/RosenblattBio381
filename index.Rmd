@@ -3,14 +3,12 @@ title: "Homepage"
 author: "Sam Rosenblatt"
 date: "8/29/2018"
 output: 
-  html_document: 
-    theme: lumen
+  rmdformats::html_clean:
+    highlight: kate
 ---
 <body style="background-color:#e6ffff;">
 </body>
-<!--- output: 
-  rmdformats::html_clean:
-    highlight: kate --->
+
 ### Computational Biology
 ### Fall 2018    
 
@@ -19,6 +17,11 @@ output:
 Office: Marsh Life Science 211   
 Office Hours: Monday 2-3pm; Tuesday 11:30am-12:30pm    
 Email: lvash@uvm.edu   
+</p>
+
+<p align="center">
+#### Student: Sam Rosenblatt 
+Email: sfrosenb@uvm.edu   
 </p>
 
 
@@ -65,10 +68,11 @@ Email: lvash@uvm.edu
 [Detailed Instructions from Lecture](https://gotellilab.github.io/Bio381/Lectures/Lecture01.html)   
    
 **Due:**   
-1. Your github homepage   
-2. Your BIO 381 webpage    
+1. Your github homepage: https://github.com/sfrosenb
+
+2. Your BIO 381 webpage: https://sfrosenb.github.io/RosenblattBio381/
    
-**No solution**   
+   
 
 ------
 <div id='id-section2'/>
