@@ -82,6 +82,7 @@ Email: sfrosenb@uvm.edu
 
 **Due:**   
 1) **2 of the 4 diagrams** discussed in class: a) cause-and-effect diagram; b) pre-graph; c) DIPSwitch table c) logic tree    
+[Link to HW2](Homework2Bio381.html)
 2) Link to the homework on your webpage   
 [Example using html](Dissertation_PathDiagram2.html)     
 [Homework 2 Link](testimage.html)
@@ -90,7 +91,7 @@ Email: sfrosenb@uvm.edu
 <div id='id-section3'/>
 ### Week 3: 
 
-Due:   
+[Homework 3](FirstBeamerPresentationPdf1.pdf) 
        
 
 

@@ -1,0 +1,79 @@
+---
+title: "Immunization Strategies in Complex Networks: Addressing the Problem of Missing Data"
+author: "Sam Rosenblatt"
+date: "9/12/2018"
+output: 
+  beamer_presentation: 
+    colortheme: rose
+    fonttheme: professionalfonts
+    theme: Szeged
+---
+
+
+
+## Complete Data is Rare: \newline Regular Issues with Census Data
+
+- Unwilling to be interviewed
+
+\bigskip
+
+- Contact details secret even among partners
+
+\bigskip
+
+- Population members inaccessible
+    - Incarcerated
+    - Homeless (no address)
+
+
+
+## Complete Data is Rare: \newline Hidden Population Example - Colorado Springs
+
+- At least 44% of nodes missing (out of those found eligible for the study)
+
+\bigskip
+
+- At least 88% of nodes with incomplete local network data
+
+\bigskip
+
+- These are generous lower bounds
+
+
+
+
+## Complete Data is Rare: \newline Impact on Centrality Measures
+
+\begin{picture}(320,250)
+ \put(00,105){\includegraphics[height=4.5cm]{betweennessExample.jpg}}
+ \put(00,90){\begin{minipage}[t]{0.9\linewidth}
+ {Some centrality measures can change drastically with the addition/removal of few nodes}
+ \end{minipage}}
+ \end{picture}
+ 
+## Stochastic Strategies
+>- 1: Randomly sample from node list 
+>- 2: Investigate local network around randomly sampled node
+>- 3: Nodes are found to be central if they are frequently found to be locally important
+
+
+## True Network vs Known Network
+
+ \begin{picture}(320,250)
+ \put(-25,100){\includegraphics[height=3.4cm]{trueNetwork.jpg}}
+ \put(155,100){\includegraphics[height=3.4cm]{KnownNetwork.jpg}} 
+ \put(00,50){\begin{minipage}[t]{1\linewidth}
+ \end{minipage}}
+ \end{picture}
+ 
+
+## Relative Efficacy of Immunization Strategies 
+	
+
+ \begin{picture}(320,250)
+ \put(0,40){\includegraphics[height=7cm]{RelativeEfficacyAll.jpg}}
+ \put(50,180){\begin{minipage}[t]{0.4\linewidth}
+ {\color{blue}Random \\ \color{green}Betweenness \\ \color{purple}Degree  \\ \color{red}AcquaintanceKK \\ \color{yellow}AcquaintanceKG \\ \color{orange}AcquaintanceGG}
+ \end{minipage}}
+ \end{picture}
+
