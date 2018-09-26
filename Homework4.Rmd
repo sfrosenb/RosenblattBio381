@@ -1,0 +1,225 @@
+---
+title: "Homework4"
+author: "Sam Rosenblatt"
+date: "9/19/2018"
+output: html_document
+---
+
+## Number 1
+
+Suppose x = 1.1, a = 2.2, and b = 3.3. Assign each expression to the value of the variable z and print the value stored in z.
+
+a) $x^{a^b}$
+b) $(x^{a})^b$
+c) $3x^3 + 2x^2 + 1$
+
+### 1.a
+
+
+
+```{r}
+x <- 1.1
+a <- 2.2
+b <- 3.3
+
+z <- x^a^b
+print (z)
+```
+
+### 1.b
+```{r}
+x <- 1.1
+a <- 2.2
+b <- 3.3
+
+z <- (x^a)^b
+print (z)
+```
+
+### 1.c
+```{r}
+x <- 1.1
+a <- 2.2
+b <- 3.3
+
+z <- 3*x^3 + 2*x^2 +1
+print (z)
+```
+
+## Number 2
+
+ Using the `rep` and `seq` functions, create the following vectors:
+
+a) $(1,2,3,4,5,6,7,8,7,6,5,4,3,2,1)$
+b) $(1,2,2,3,3,3,4,4,4,4,5,5,5,5,5)$
+c) $(5,4,4,3,3,3,2,2,2,2,1,1,1,1,1)$
+
+### 2.a
+
+```{r}
+myVec <- c(seq(8), seq(from = 7, to=1, by=-1))
+print (myVec)
+```
+
+### 2.b 
+```{r}
+
+myVec <- rep(x=seq(5), times = seq(5))
+print (myVec)
+```
+
+### 2.c
+```{r}
+myVec <- rep(x=seq(from = 5, to = 1, by=-1), times = seq(5))
+print (myVec)
+```
+
+## Number 3
+3. Create a vector of two random uniform numbers. In a spatial map, these can be interpreted as *x* and *y* coordinates that give the location of an individual (such as a marked forest tree in a plot that has been mapped). Using one of R's inverse trigonometry functions (`asin()`, `acos()`, or `atan()`), convert these numbers into polar coordinates (If you don't know what polar coordinates are, read about them on the web or in your calculus textbook).
+
+```{r}
+coords <- runif(2)
+print (coords)
+
+r <- (coords[1]^2 + coords[2]^2)^(1/2)
+print (r)
+
+theta <- atan(coords[2]/ coords[1])
+print (theta)
+
+polarCoords <- c(r, theta)
+names(polarCoords) <- c("r", "theta")
+print (polarCoords)
+```
+
+## Number 4
+
+Suppose that `queue <- c("sheep", "fox", "owl", "ant")` and that `queue` represents the animals that are lined up to enter Noah's Ark, with the sheep at the front of the line. Using R expressions, update the queue successively as 
+
+    a) the serpent arrives;
+    b) the sheep enters the ark;
+    c) the donkey arrives and talks his way to the front of the line;
+    d) the serpent gets impatient and leaves;
+    e) the owl gets bored and leaves;
+    f) the aphid arrives and the ant invites him to cut in line.
+    g) Finally, determine the position of the aphid in the line.
+
+```{r}
+queue <- c("sheep", "fox", "owl", "ant")
+print(queue)
+
+queue <- c(queue, "serpent")
+print (queue)
+
+queue <- queue[2:length(queue)]
+print (queue)
+
+queue <- c( "donkey", queue)
+print (queue)
+
+queue <- queue[1:(length(queue)-1)]
+print (queue)
+
+queue <- queue[queue!="owl"]
+print (queue)
+
+queue <- c(queue[1:2], "aphid", queue[3])
+print (queue)
+
+print(which(queue == "aphid"))
+
+```
+
+
+## Number 5
+Use R to create a vector of all of the integers from 1 to 100 that are not divisible by 2, 3, or 7
+
+```{r}
+allNums <- seq(100)
+no2 <- allNums[(allNums %% 2) != 0]
+no2or3 <- no2[(no2 %% 3) != 0]
+no2or3or7 <- no2or3[(no2or3 %% 7) != 0]
+print (no2or3or7)
+
+
+
+```
+
+
+# Regular expression puzzles
+
+## Number 6
+
+Find: ` {2,}`
+Replace: `,`
+
+The columns are alligned with multiple spaces between columns. Thus the first part of the regular expression is the space character(hard to see here). We want to replace those spaces with a comma. Thus the replace will be a single comma character. However, there are some elements of the data frame that have spaces within them, and we dont want to break those up, so we cant just use the space character without a quantifier. We know the column breaks we are looking for have at least two spaces so our quantifier will begin with a 2, and we have no upper limit for the number of spaces between columns so we leave the upper limit blank. 
+
+Note that if the columns were aligned using tabs instead of spaces as the question seems to imply, then we would have Find: `\t+` instead. 
+
+## Number 7
+
+Find: `(\w+), (\w+), ([^\n]+)`
+
+Replace: `\2 \1 (\3)`
+
+Consider each line from the perspective that each is composed of lastName + ", " + firstName + ", " + universityName + lineBreak
+
+Our task is to describe each line as a regular expression in such a way that lastName, firstName, and universityName can be captured.
+
+Each line begins with lastName, which consists of one or more word characters in a row, which can be described as `\w+`, but we want to capture it so we encase it in our first parentheses. the next part of each line is the ", ", which we can just write out explicitly. Then firstName and the next ", " can be described in a similar way, with firstName being encased in the second parentheses. Finally we want the universityName, which we can think of as just everything else before we get to the end of the line, so we can describe that as one or more characters which are not line breaks. We capture that chunk with our third set of parentheses
+
+For our replace expression we can describe each desired line as being composed of firstName + " " + lastName + " " + "(" + universityName + ")" and so we write out that line except in the place of firstName we put `\2` since it was the second captured thing and in place of lastName we put `\1` since it was our first captured thing, and in place of universityName we put `\3` since it was our third captured thing.
+
+
+## Number 8
+
+### Part A
+All of these files are on a single line, so first write a regular expression to place each file name on its own line:
+
+Find: ` (\d{4})` A space followed by a captured 4 number characters
+
+Replace: `\n\1` A newline character followed by the captured 4 numbers
+
+Every entry begins with a four digit number preceeded by a space, and we want each entry on its own line. To do so, really we just want to put a newline before each 4 digit number, but since these work by find and REPLACE, since we do not actually want to replace the 4 digit number we just capture it and "replace" it with itself preceeded by a newline character. Also we got rid of the space preceeding it because it does nothing.
+
+###Part B
+
+Now write a regular expression to grab the four digit number and put it at the end of the title:
+
+Find: `(\d{4}) ([^.]+)`  A captured 4 digit number, followed by a space, followed by everything up to the next period
+
+Replace: `\2_\1` Everything up to the captured number, followed by an underscore, followed by the 4 digit number. 
+
+We capture the 4 digit number because we want to move it to another part of the line, then we put a space that we want to get rid of uncaptured, then we capture everything before the point we want to move the number to, then we ignore the rest of the line(the .mp3) because we want to keep it as is.
+
+We then replace this with everything up to the point we want to put the number in, followed by an underscore that we are adding, then the captured number, and the rest of the line (the .mp3) stays in place.
+
+
+
+## Number 9
+
+###Part A
+
+Find: `(\w)\w+,(\w+),[0-9.]+,([0-9]+)` Capture the first word character (first letter of genus), followed by the rest of the genus, followed by a comma, then capture the species, followed by a comma, then one or more numbers and decimals which make up the first numeric variable (which we dont use), then a comma, then capture the second numeric variable
+
+Replace: `\1_\2,\3` The first letter of the genus is the first word character captured, then an underscore, then the entire species name, then a comma, then the second numeric variable
+
+### Part B
+
+Find: `(\w)\w+,(\w{4})\w+,[0-9.]+,([0-9]+)` 
+
+Replace: `\1_\2,\3`
+
+This is very similar to part A except we only want the first 4 word characters of the species to be our second capture, so we turn that second quantifier from "one or more" to exactly 4, and then we have to account for the rest of the species name, so we add a "one or more word characters" after our second capture. The replace follows the exact same reasoning asa part A
+
+
+
+
+
+
+
+
+
+
+

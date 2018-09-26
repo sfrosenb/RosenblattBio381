@@ -100,13 +100,14 @@ Email: sfrosenb@uvm.edu
 <div id='id-section4'/>
 ### Week 4:    
 
-Due:   
+[Homework 4](Homework4.html)  
       
 
 ------
 <div id='id-section5'/>   
 ### Week 5: 
-Due:   
+
+[Homework 5](Homework5.html)
    
  
 ------
