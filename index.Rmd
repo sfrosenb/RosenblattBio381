@@ -113,6 +113,7 @@ Email: sfrosenb@uvm.edu
 ------
 <div id='id-section6'/>   
 ### Week 6: 
+[Homework 6](Homework6.html)
 
 ------
 <div id='id-section7'/>
