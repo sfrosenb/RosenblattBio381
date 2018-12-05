@@ -140,4 +140,6 @@ Due:
 
 ------
 <div id='id-section11'/>
-### Week 11:   
+### Week 11:  
+
+[Final Project](igraphPresentationFinal.html)  
