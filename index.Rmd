@@ -86,7 +86,7 @@ Email: sfrosenb@uvm.edu
 [Link to HW2](Homework2Bio381.html)
 2) Link to the homework on your webpage   
 [Example using html](Dissertation_PathDiagram2.html)     
-[Homework 2 Link](testimage.html)
+[Homework 2 Link](Homework2Bio381.html) Note: You have to scroll down on the page to see the diagram.
 
 ------
 <div id='id-section3'/>
@@ -137,7 +137,7 @@ I know this assignment was cancelled but I did almost all of it so I thought I w
 ------
 <div id='id-section10'/>
 ### Week 10:    
-
+[Homework 10](Homework10.html)
 
 ------
 <div id='id-section11'/>

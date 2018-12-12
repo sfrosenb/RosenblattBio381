@@ -1,0 +1,230 @@
+---
+title: "Homework10"
+author: "Sam Rosenblatt"
+date: "10/31/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+#Number 1
+Using a for loop, write a function to calculate the number of zeroes in a numeric vector. Before entering the loop, set up a counter variable counter <- 0. Inside the loop, add 1 to counter each time you have a zero in the matrix. Finally, use return(counter) for the output.
+
+```{r}
+CalculateZeros <- function(vec) {
+  counter <-0
+  for (i in 1:length(vec)){
+    if (vec[i] == 0) counter <- counter+1
+  }
+
+ return(counter)
+}
+
+
+CalculateZeros(c(0,0,1,1,4,0))
+
+```
+
+
+#Number 2
+Use subsetting instead of a loop to rewrite the function as a single line of code.
+
+```{r}
+CalculateZerosSubsetting <- function(vec) {
+  return(length((vec[vec==0])))
+        }
+
+CalculateZerosSubsetting(c(0,0,1,1,4,0))
+```
+
+
+#Number 3
+Write a function that takes as input two integers representing the number of rows and columns in a matrix. The output is a matrix of these dimensions in which each element is the product of the row number x the column number.
+
+
+
+```{r}
+number3 <- function(N, M) {
+  mat <- matrix(nrow=N,ncol=M)
+  for (i in 1:N) {
+    for (j in 1:M) {
+      mat[i, j] <- i*j
+    }
+  }
+
+ return(mat)
+}
+number3(N=5,M= 3)
+
+```
+
+
+#Number 4
+Use the code from yesterday’s class to design and conduct a randomization test for some of your own data. You will need to modify the functions that read in the data, calculate the metric, and randomize the data. Once those are set up, the program should run correctly calling your new functions. Also, to make your analysis fully repeatable, make sure you set the random number seed at the beginning (use either set.seed() in base R, or char2seed in the TeachingDemos package
+
+
+
+NOTE TO SELF: USE EXACT TESTS!!! WITH MEAN OF PROPORTIONS OF ONE STRATEGY AS THE METRIC https://en.wikipedia.org/wiki/Resampling_(statistics)#Permutation_tests
+
+
+```{r}
+####### ###########################################
+# function: readData
+# read in (or generate) data set for analysis
+# input: file name (or nothing, for this demo)
+# output: 3 column data frame of observed data (ID,x,y)
+#------------------------------------------------- 
+readData <- function(z=NULL) {
+                if(is.null(z)){
+                  xObs <- 1:20
+                  yObs <- xObs + 10*rnorm(20)
+                  dF <- data.frame(ID=seq_along(xObs),xObs,yObs)} # set up data frame                 
+  dF <-read.table(file=z,row.names=NULL,header=TRUE,sep=",",stringsAsFactors=FALSE)
+#print(qplot(x=xObs,y=yObs)) # peek at input data
+return(dF)
+}
+
+```
+
+```{r}
+##################################################
+# function: getMetric
+# calculate metric for randomization test
+# input: 2-column data frame for regression
+# output: regression slope
+#------------------------------------------------- 
+getMetric <- function(z=NULL) {
+                # if(is.null(z)){
+                #   xObs <- 1:20
+                #   yObs <-  xObs + 10*rnorm(20)
+                #   z <- data.frame(ID=seq_along(xObs),xObs,yObs)} # set up data frame                 
+
+return(mean(z[,1])-mean(z[,2]))
+  
+  
+# . <- lm(z[,3]~z[,2])
+# . <- summary(.)
+# . <- .$coefficients[2,1]
+# 
+# slope <- .
+# 
+# 
+# return(slope)
+}
+```
+
+
+
+
+```{r}
+dFM <- readData("csvVersionOfObsDictMcommaReplace.csv") #It was a ton of work to get this to function properly but that work is not reflected in the code as it was done using BBEdit and Python 
+
+
+```
+
+
+
+```{r}
+# 
+# py_dict = readLines('/Users/samrosenblatt/Downloads/ObsDictMcopy.txt')
+# # e.g.
+# #{"cat_name": "Ella", "dwell_status": "tree_dweller", "coat_color": "gray, white, orange", "is_from_hell": "Y"}
+# #{"cat_name": "Billie", "dwell_status": "bush_dweller", "coat_color": "gray, white", "is_from_hell": "N"}
+# 
+# dict_to_df = function(dict) {
+#   
+#   require(plyr)
+#   df = data.frame()
+#   df_temp = list()
+#   store = list()
+#   
+#   for (i in 1:length(dict)) {
+# 
+#     # Split up the dictionary entry
+#     split = unlist(strsplit(dict[i], '\",'))
+#     split = gsub('\\{', '', split)
+#     split = gsub('\\}', '', split)
+#     values = unlist(strsplit(split, ':'))
+# 
+#     # Parse out what will be the df headers
+#     headers = values[seq(1, length(values), 2)]       
+#     headers = gsub('\"', '', headers) # Remove quotes
+#     headers = gsub(' ', '', headers)  # and whitespace
+# 
+#     # Parse out what will be the df values
+#     row_values = values[seq(0, length(values), 2)]
+#     row_values = gsub('\"', '', row_values) # Remove quotes
+#     row_values = gsub(' ', '', row_values)  # and whitespace
+# 
+#     # Construct a dataframe with 1 row
+#     out = data.frame(t(row_values))
+#     colnames(out) = headers
+# 
+#     store[i] = list(out)
+# 
+#     if (i %% 1000 == 0) { print(round(i / length(dict), 2)) }
+# 
+#   }
+# 
+#     # rbind all the dataframes together into one dataframe 
+#     list_length = length(store)
+#     
+#     # If the dictionary is sufficiently large rbind will be slow
+#     # as all hell, so break the rbinding into multiple steps
+#     if (list_length >= 3000) {
+# 
+#       no_splits = round(list_length / 500)
+#       chunks = split(store, 1:no_splits)
+# 
+#       for (j in 1:no_splits) {
+# 
+#         df_temp[j] = list(rbind.fill(chunks[[j]]))
+#         
+#       }
+#       df = rbind.fill(df_temp)
+#       return(df)
+#     }
+# 
+#     else {
+# 
+#       df = rbind.fill(store)
+#       return(df)
+#     }
+# 
+# }
+# 
+# r_df = dict_to_df(py_dict)
+# 
+# library(dplyr)
+# 
+# data<-as_tibble(r_df)
+# glimpse(data)
+# #  cat_name dwell_status        coat_color is_from_hell
+# #1     Ella tree_dweller gray,white,orange            Y
+# #2   Billie bush_dweller        gray,white            N
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# readData <- function(z = NULL){
+#   # if(is.null(z)){
+#   #   xObs <- 1:20
+#   #   yObs <- xObs + 10*rnorm(20)   #Set up default values that will have a correlation, but with some noise to make it more realistic
+#   #   dF <- data.frame(ID=seq_along(xObs),
+#   #                    xObs,
+#   #                    yObs)} else {
+#   #   dF <- read.table(file=z, row.names=1, header=TRUE, sep = ",", stringsAsFactors=FALSE)}
+#   #   return(dF)
+#   
+#   
+#   
+# }
+# readData()
+```
+
+
+
