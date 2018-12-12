@@ -56,6 +56,7 @@ Email: sfrosenb@uvm.edu
 * [Homework 9: ](#id-section9)   
 * [Week 10: ](#id-section10)
 * [Week 11: ](#id-section11)
+* [Week 12: ](#id-section12)
 
 
 ## Homework Solutions and Notes
@@ -124,14 +125,14 @@ Email: sfrosenb@uvm.edu
 <div id='id-section8'/>
 ### Week 8:  
 
-Due:   
+   
    
 
 ------
 <div id='id-section9'/>
 ### Week 9: 
-
-Due:   
+[Homework 9](Homework9.html)
+I know this assignment was cancelled but I did almost all of it so I thought I would put it here in case you might take that into account if I am missing anything else
 
 ------
 <div id='id-section10'/>
@@ -141,5 +142,11 @@ Due:
 ------
 <div id='id-section11'/>
 ### Week 11:  
+[Homework 11](Homework11.html)
+
+------
+<div id='id-section12'/>
+### Week 12:
 
 [Final Project](igraphPresentationFinal.html)  
+[Final Project Markdown File](igraphPresentationFinal.rmd)

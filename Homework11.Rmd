@@ -1,0 +1,102 @@
+---
+title: "R Notebook"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+Ok so there are a bunch of plots here but the only one I remember working on is the last one at the bottom, which took me an entire day to make and which I will be using something like in my actual research. I am going to leave in the other plots in case they were actually things I worked on, but I think they may have just been your code that I pasted in here while working on my plot for a convenient example to work from
+
+
+
+```{r}
+# installing patchwork
+#install.packages("devtools")
+#devtools::install_github("thomasp85/patchwork")
+library(patchwork)
+
+
+# testing patchwork
+library(ggplot2)
+p1 <- qplot(mtcars$mpg, mtcars$disp)
+p2 <- qplot(mtcars$mpg, mtcars$wt)
+p1 + p2 # Error: Don't know how to add p2 to a plot (if patchwork is not installed)
+
+
+
+# installing packages for viridis and desaturating
+#install.packages("colorspace", repos = "http://R-Forge.R-project.org")
+devtools::install_github("wilkelab/cowplot")
+devtools::install_github("clauswilke/colorblindr")
+
+
+library(colorspace)
+library(cowplot)
+library(colorblindr) 
+
+
+fig <- ggplot(iris, aes(Sepal.Length, fill = Species)) + geom_density(alpha = 0.7)
+fig
+
+p3des<-edit_colors(fig, desaturate)
+ggdraw(p3des)
+
+```
+
+```{r}
+data("diamonds")
+head(diamonds)
+
+
+sig2size <- function(p, sSize=9, nsSize=1.5, noSize=0) {
+  if (p < 0.05){
+    return(sSize)
+  }
+  else if( p < 1){
+    return(nsSize)
+  }
+  else{
+    return(noSize)
+  }
+}
+
+# a data frame is a list of equal-lengthed vectors, each of which is a column
+
+xs <- as.numeric(c(10, 10, 10, 10, 10, 10, 10, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 40, 40, 40, 40, 40, 40, 40, 50, 50, 50, 50, 50, 50, 50, 60, 60, 60, 60, 60, 60, 60, 70, 70, 70, 70, 70, 70, 70))
+ys <- as.numeric(c(10, 20, 30, 40, 50, 60, 70, 10, 20, 30, 40, 50, 60, 70, 10, 20, 30, 40, 50, 60, 70, 10, 20, 30, 40, 50, 60, 70, 10, 20, 30, 40, 50, 60, 70, 10, 20, 30, 40, 50, 60, 70, 10, 20, 30, 40, 50, 60, 70))
+diffs <- as.numeric(c(0.0, 2.26696, 2.24078, 2.23782, 1.95372, 2.98152, 3.0043, -2.26696, 0.0, -0.02617999999999998, -0.029139999999999833, -0.3132400000000001, 0.7145600000000001, 0.7373400000000001, -2.24078, 0.02617999999999998, 0.0, -0.0029599999999998516, -0.2870600000000001, 0.7407400000000002, 0.7635200000000001, -2.23782, 0.029139999999999833, 0.0029599999999998516, 0.0, -0.28410000000000024, 0.7437, 0.7664799999999999, -1.95372, 0.3132400000000001, 0.2870600000000001, 0.28410000000000024, 0.0, 1.0278000000000003, 1.0505800000000003, -2.98152, -0.7145600000000001, -0.7407400000000002, -0.7437, -1.0278000000000003, 0.0, 0.022779999999999995, -3.0043, -0.7373400000000001, -0.7635200000000001, -0.7664799999999999, -1.0505800000000003, -0.022779999999999995, 0.0))
+directions <- as.character(sapply(diffs, sign))
+#magnitude <- 
+pvalues <- c(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.3013, 0.2742, 0.0, 0.0, 0.0, 0.0, 0.3093, 1.0, 0.4649, 0.0, 0.0, 0.0, 0.0, 0.2869, 0.4785, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0) #These p-valeus are approximations from randomization tests with 10,000 permutations. my guess as to to why some are "0" is that their true value is so low that the approximation is 0. But its fine because I am only marking them as significant or not
+#pSizes <- sapply(pvalues, function(x, y, z),  )
+pSizes <- sapply(pvalues, sig2size)
+dFrame <- data.frame(xs,ys,diffs, directions, pvalues, stringsAsFactors=FALSE)
+print(dFrame)
+str(dFrame)
+head(dFrame)
+head(diamonds)
+
+# add another row with rbind lecture 8
+
+stratsCorrection <- c("Rand", "Core", "Btwn", "Deg", "AqKK", "AqKG", "AqGG" )
+
+
+ggplot(aes(x= dFrame$xs, y=dFrame$ys, color=dFrame$directions, fill=dFrame$diffs, size=pSizes, xlab = letters[1:49]), data=dFrame ) +
+  geom_point(shape=21, stroke=1) + 
+  scale_colour_manual(values = c("blue","grey", "red"), name="Row  vs. Col", labels= c("mean(Col) > mean(Row)", "NA", "mean(Row) > mean(Col)" )) + 
+  scale_fill_distiller(type='div', palette='RdBu', name="Row  - Col") +
+  scale_x_continuous(name = NULL, breaks = c(10, 20, 30, 40, 50, 60, 70), labels = stratsCorrection) +
+  scale_y_continuous(name = NULL, breaks = c(10, 20, 30, 40, 50, 60, 70), labels = stratsCorrection) +
+  scale_size_continuous(name="significance level", breaks = c(0, 1.5, 9), labels=c("NA", "p>0.05", "p<0.05"))+
+  labs(title="Pairwise Comparison of Immunization Strategies",
+      subtitle="Differences in outbreak sim. distributions: mean and significance") +
+   theme_dark()
+
+
+
+
+
+
+#Possibly alternately I could use the outline of the dot to indicate direction and use fill to indicate magnitude. This might clear up issues with very light blue looking like very light red, which I used the dot outline to make clearer
+```
+
+
