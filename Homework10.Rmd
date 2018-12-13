@@ -64,24 +64,53 @@ Use the code from yesterday’s class to design and conduct a randomization test
 
 
 
-NOTE TO SELF: USE EXACT TESTS!!! WITH MEAN OF PROPORTIONS OF ONE STRATEGY AS THE METRIC https://en.wikipedia.org/wiki/Resampling_(statistics)#Permutation_tests
+NOTE TO SELF: USE EXACT TESTS FOR MY OWN RESEARCH!!! WITH MEAN OF PROPORTIONS OF ONE STRATEGY AS THE METRIC https://en.wikipedia.org/wiki/Resampling_(statistics)#Permutation_tests
 
 
 ```{r}
 ####### ###########################################
 # function: readData
-# read in (or generate) data set for analysis
-# input: file name (or nothing, for this demo)
-# output: 3 column data frame of observed data (ID,x,y)
+# read in data set for analysis
+# input: file name 
+# output: data frame version of the csv file you entered 
 #------------------------------------------------- 
-readData <- function(z=NULL) {
-                if(is.null(z)){
-                  xObs <- 1:20
-                  yObs <- xObs + 10*rnorm(20)
-                  dF <- data.frame(ID=seq_along(xObs),xObs,yObs)} # set up data frame                 
-  dF <-read.table(file=z,row.names=NULL,header=TRUE,sep=",",stringsAsFactors=FALSE)
-#print(qplot(x=xObs,y=yObs)) # peek at input data
-return(dF)
+readData <- function(filename=NULL) {
+                
+  df <-read.table(file=filename,row.names=NULL,header=TRUE,sep=",",stringsAsFactors=FALSE)
+return(df)
+}
+
+```
+
+```{r}
+##################################################
+# function: shuffleData
+# randomize data by randomly swapping half the data between the control and treatment groups
+# input: data frame with your control as one variable and the treatment as the other
+# output: dataframe where what is actually in each column is random
+#------------------------------------------------- 
+shuffleData <- function(df) {
+  data = df
+  temp = df
+  s = sample(1:(length(data[,1])), length(data[,1])/2, replace=F)
+  data[,1] = c(data[-s,1], temp[s,2])
+  data[,2] = c(data[-s, 2], temp[s, 1])
+  # plot(data[,1])
+  return(data)
+}
+```
+
+
+```{r}
+##################################################
+# function: getPVal
+# calculate p value from simulation
+# input: list of observed metric, and vector of simulated metrics
+# output: lower, upper tail probability values
+#------------------------------------------------- 
+getPVal <- function(null_dist, obs_mean, n=1000){
+  pLower <- length(null_dist[null_dist > obs_mean]) / n
+  return(pLower)
 }
 
 ```
@@ -90,141 +119,55 @@ return(dF)
 ##################################################
 # function: getMetric
 # calculate metric for randomization test
-# input: 2-column data frame for regression
-# output: regression slope
+# input: 2-column data frame
+# output: null distribution
 #------------------------------------------------- 
-getMetric <- function(z=NULL) {
-                # if(is.null(z)){
-                #   xObs <- 1:20
-                #   yObs <-  xObs + 10*rnorm(20)
-                #   z <- data.frame(ID=seq_along(xObs),xObs,yObs)} # set up data frame                 
+getMetric <- function(data, n=1000) {
+  . <- rep(-1, n)
+  for (i in 1:n) {
+    shuffled <- shuffleData(data)
+    .[i] <-mean(shuffled[,1]) - mean(shuffled[,2])
+  }
+  return(.)
+}
+```
 
-return(mean(z[,1])-mean(z[,2]))
-  
-  
-# . <- lm(z[,3]~z[,2])
-# . <- summary(.)
-# . <- .$coefficients[2,1]
-# 
-# slope <- .
-# 
-# 
-# return(slope)
+
+```{r}
+##################################################
+# function: plotRanTest
+# create ggplot of histogram of simulated values
+# input: list of observed metric and vector of simulated metrics
+# output: saved ggplot graph
+#------------------------------------------------- 
+library(ggplot2)
+
+plotRanTest <- function(null_dist, obs_mean) {
+  ggplot(data.frame(null_dist), aes(null_dist)) + geom_histogram(bins=50) +
+    geom_vline(xintercept=obs_mean, col='orange', linetype='dashed')
 }
 ```
 
 
 
-
 ```{r}
-dFM <- readData("csvVersionOfObsDictMcommaReplace.csv") #It was a ton of work to get this to function properly but that work is not reflected in the code as it was done using BBEdit and Python 
+nSim <- 1000
 
+dfM <- readData("csvVersionOfObsDictMcommaReplace.csv") #It was a ton of work to get this to function properly but that work is not reflected in the code as it was done using BBEdit and Python 
+
+
+
+sub <- c("X.AcqHH2..0.6..0.01.", "X.AcqGG2..0.6..0.01.") #These are the results of using two different targeted immunization strategies, one of which we consider the "control", for the same paramter set (60% of nodes unknown, 1% of the population immunized)
+cntrlAndTreat <- dfM[sub]
+
+
+set.seed(11235)
+null_dist = getMetric(cntrlAndTreat, n=10000)
+getPVal(null_dist, mean(cntrlAndTreat$X.AcqHH2..0.6..0.01.) - mean(cntrlAndTreat$X.AcqGG2..0.6..0.01.))
+
+
+plotRanTest(null_dist, mean(cntrlAndTreat$X.AcqHH2..0.6..0.01.) - mean(cntrlAndTreat$X.AcqGG2..0.6..0.01.))
 
 ```
-
-
-
-```{r}
-# 
-# py_dict = readLines('/Users/samrosenblatt/Downloads/ObsDictMcopy.txt')
-# # e.g.
-# #{"cat_name": "Ella", "dwell_status": "tree_dweller", "coat_color": "gray, white, orange", "is_from_hell": "Y"}
-# #{"cat_name": "Billie", "dwell_status": "bush_dweller", "coat_color": "gray, white", "is_from_hell": "N"}
-# 
-# dict_to_df = function(dict) {
-#   
-#   require(plyr)
-#   df = data.frame()
-#   df_temp = list()
-#   store = list()
-#   
-#   for (i in 1:length(dict)) {
-# 
-#     # Split up the dictionary entry
-#     split = unlist(strsplit(dict[i], '\",'))
-#     split = gsub('\\{', '', split)
-#     split = gsub('\\}', '', split)
-#     values = unlist(strsplit(split, ':'))
-# 
-#     # Parse out what will be the df headers
-#     headers = values[seq(1, length(values), 2)]       
-#     headers = gsub('\"', '', headers) # Remove quotes
-#     headers = gsub(' ', '', headers)  # and whitespace
-# 
-#     # Parse out what will be the df values
-#     row_values = values[seq(0, length(values), 2)]
-#     row_values = gsub('\"', '', row_values) # Remove quotes
-#     row_values = gsub(' ', '', row_values)  # and whitespace
-# 
-#     # Construct a dataframe with 1 row
-#     out = data.frame(t(row_values))
-#     colnames(out) = headers
-# 
-#     store[i] = list(out)
-# 
-#     if (i %% 1000 == 0) { print(round(i / length(dict), 2)) }
-# 
-#   }
-# 
-#     # rbind all the dataframes together into one dataframe 
-#     list_length = length(store)
-#     
-#     # If the dictionary is sufficiently large rbind will be slow
-#     # as all hell, so break the rbinding into multiple steps
-#     if (list_length >= 3000) {
-# 
-#       no_splits = round(list_length / 500)
-#       chunks = split(store, 1:no_splits)
-# 
-#       for (j in 1:no_splits) {
-# 
-#         df_temp[j] = list(rbind.fill(chunks[[j]]))
-#         
-#       }
-#       df = rbind.fill(df_temp)
-#       return(df)
-#     }
-# 
-#     else {
-# 
-#       df = rbind.fill(store)
-#       return(df)
-#     }
-# 
-# }
-# 
-# r_df = dict_to_df(py_dict)
-# 
-# library(dplyr)
-# 
-# data<-as_tibble(r_df)
-# glimpse(data)
-# #  cat_name dwell_status        coat_color is_from_hell
-# #1     Ella tree_dweller gray,white,orange            Y
-# #2   Billie bush_dweller        gray,white            N
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# readData <- function(z = NULL){
-#   # if(is.null(z)){
-#   #   xObs <- 1:20
-#   #   yObs <- xObs + 10*rnorm(20)   #Set up default values that will have a correlation, but with some noise to make it more realistic
-#   #   dF <- data.frame(ID=seq_along(xObs),
-#   #                    xObs,
-#   #                    yObs)} else {
-#   #   dF <- read.table(file=z, row.names=1, header=TRUE, sep = ",", stringsAsFactors=FALSE)}
-#   #   return(dF)
-#   
-#   
-#   
-# }
-# readData()
-```
-
-
+The tests I currently have running give back that this difference is not significant, and it seems like they are correct
 
