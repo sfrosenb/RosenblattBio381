@@ -1,0 +1,155 @@
+---
+title: "Homework9"
+author: "Sam Rosenblatt"
+date: "10/24/2018"
+output: html_document
+---
+
+#Number 1
+Using a for or while loop, write a function to calculate the number of zeroes in a numeric vector.
+
+
+```{r}
+CalculateZeros <- function(vec) {
+  zeros <-0
+  for (i in 1:length(vec)){
+    if (vec[i] == 0) zeros <- zeros+1
+  }
+
+ return(zeros)
+}
+
+
+CalculateZeros(c(0,0,1,1,4,0))
+
+```
+
+#Number 2
+Use subsetting instead of a loop to rewrite the function as a single line of code.
+
+```{r}
+CalculateZerosSubsetting <- function(vec) {
+  return(length((vec[vec==0])))
+        }
+
+CalculateZerosSubsetting(c(0,0,1,1,4,0))
+```
+
+#Number 3
+
+Write a function that takes as input a numeric vector, and returns as output the maximum difference between all possible pairs of elements. Be careful to ensure that your function works properly with both negative and positive numbers. For your first version of the function, create a vector that stores all possible pairwise differences and then extracts the maximum value from that list.
+
+
+
+
+```{r}
+MaxPairwiseDiff <- function(vec) {
+  diffs <-numeric(0)
+  for (i in 1:length(vec)) {
+    for (j in 1:length(vec)) {
+      #print(cat("i: ", i, " j: ", j, " diff: ",abs(vec[i]-vec[j]) ))
+      diffs <- c(diffs, abs(vec[i]-vec[j]))
+    }
+  }
+
+ return(max(diffs))
+}
+
+MaxPairwiseDiff(c(0,0,1,1,4,-9))
+```
+
+#Number 4
+Now modify the output of (3) to yield a list with 3 elements. The first list item is the pair of vector values that are the maximum distance apart, the second list item is the pair of numbers representing the position of these elements in the vector, and the third list item is the maximum distance calculated from this pair.
+
+
+```{r}
+Number4 <- function(vec) {
+  indexI <-numeric(0)
+  indexJ <-numeric(0)
+  elementI <- numeric(0)
+  elementJ <- numeric(0)
+  diffs <-numeric(0)
+  for (i in 1:length(vec)) {
+    for (j in 1:length(vec)) {
+      #print(cat("i: ", i, " j: ", j, "vec[i]: ", vec[i], " vec[j]: ", vec[j], " diff: ",abs(vec[i]-vec[j]) ))
+      indexI <- c(indexI, i)
+      indexJ <- c(indexJ, j)
+      elementI <- c(elementI, vec[i])
+      elementJ <- c(elementJ, vec[j])
+      diffs <- c(diffs, abs(vec[i]-vec[j]))
+    }
+  }
+  #print(cat("indexI: ", indexI))
+  #print(cat("indexJ: ", indexJ))
+  #print(cat("elementI: ", elementI))
+  #print(cat("elementJ: ", elementJ))
+  #print(cat("diffs: ", diffs))
+  dFrame <- data.frame(indexI,indexJ,elementI,elementJ,diffs, stringsAsFactors=FALSE)
+  maxDiff = max(diffs)
+
+  subsetWithMaxDiff <- dFrame[dFrame["diffs"]==maxDiff, ]
+  listItem1 <- c(subsetWithMaxDiff[1, 3], subsetWithMaxDiff[1, 4])
+  listItem2 <- c(subsetWithMaxDiff[1, 1], subsetWithMaxDiff[1, 2])
+  listItem3 <- subsetWithMaxDiff[1, 5]
+  
+ 
+  return(list(listItem1, listItem2, listItem3))
+}
+
+Number4(c(0,0,1,1,4,-9))
+```
+#Number 5
+
+For a second version of (3), store only a temp variable that keeps track of each difference and then retains only the largest difference as it cycles through the pairwise differences.
+
+```{r}
+EfficientMaxPairwiseDiff <- function(vec) {
+  maxDiff <- -Inf
+  for (i in 1:length(vec)) {
+    for (j in 1:length(vec)) {
+      currDiff <- abs(vec[i]-vec[j])
+      if (currDiff>maxDiff) maxDiff<-currDiff
+    }
+  }
+
+ return(maxDiff)
+}
+
+EfficientMaxPairwiseDiff(c(0,0,1,1,4,-9))
+```
+
+#Number 6
+
+Write a function that takes as input two matrices, and then multiplies them together, using the rules of matrix multiplication. Your function should return a warning if the input matrices are not of the correct dimensions for matrix multiplication. Check the performance of your function by comparing with the built in R function for matrix multiplication %*%.
+
+```{r}
+Number6 <- function(mat1, mat2) {
+  mat1Rows <-dim(mat1)[1]
+  mat1Cols <-dim(mat1)[2]
+  mat2Rows <-dim(mat2)[1]
+  mat2Cols <-dim(mat2)[2]
+  
+  if(mat1Cols != mat2Rows) return("Error: number of columns of matrix 1 must match the number of rows of matrix 2")
+  
+  matProd <- matrix(nrow=mat1Rows,ncol=mat2Cols)
+  
+  for (i in (1:mat1Rows)) {
+    for (j in (1: mat2Cols)) {
+      matProd[i, j] = sum(mat1[i,]*mat2[,j])
+    }
+  }
+  
+  
+  return(matProd)
+}
+
+A <-matrix(data=1:12,nrow=4,ncol=3)
+B <-matrix(data=12:24,nrow=3,ncol=4)
+
+Number6(A, B)
+A %*% B
+```
+
+
+
+
